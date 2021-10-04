@@ -1,3 +1,3 @@
 # Urban Inequality WWW
 
-This projects hold the code we will publish for the urban inequality paper at the WWW22
+This project represents the code we used for our paper titled "Predicting urban inequality using point-of-interest data"
