@@ -21,7 +21,7 @@ from xgboost import XGBRegressor
 
 year = 2015
 
-alpha_grid = [0.0001, 0.001, 0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
+alpha_grid = [0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
 result = pd.DataFrame(columns= alpha_grid+['naive_mse','test_mse'])
 target = 'income_levels'
 
@@ -41,7 +41,7 @@ for city in ['berlin', 'bremen', 'hamburg']:
 result.to_csv(f'output/lasso_{target}.csv')
 
 
-alpha_grid = [0.0001, 0.001, 0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
+alpha_grid = [0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
 result = pd.DataFrame(columns= alpha_grid+['naive_mse','test_mse'])
 target = 'unemployment_rate'
 
@@ -60,7 +60,7 @@ for city in ['berlin', 'bremen', 'hamburg']:
 result.to_csv(f'output/lasso_{target}.csv')
 
 
-alpha_grid = [0.0001, 0.001, 0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
+alpha_grid = [0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
 result = pd.DataFrame(columns= alpha_grid+['naive_mse','test_mse'])
 target = 'foreign_nationals'
 
@@ -82,7 +82,7 @@ result.to_csv(f'output/lasso_{target}.csv')
 
 
 
-alpha_grid = [0.0001, 0.001, 0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
+alpha_grid = [0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
 pca_eval =  pd.DataFrame(columns=alpha_grid + ['naive_mse', 'test_mse'])
 target = 'income_levels'
 
@@ -103,7 +103,7 @@ for city in ['berlin', 'bremen', 'hamburg']:
 pca_eval.to_csv(f'output/pca_lasso_{target}.csv')
 
 
-alpha_grid = [0.0001, 0.001, 0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
+alpha_grid = [0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
 pca_eval =  pd.DataFrame(columns=alpha_grid + ['naive_mse', 'test_mse'])
 target = 'foreign_nationals'
 
@@ -122,7 +122,7 @@ for city in ['berlin', 'bremen', 'hamburg']:
 
 pca_eval.to_csv(f'output/pca_lasso_{target}.csv')
 
-alpha_grid = [0.0001, 0.001, 0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
+alpha_grid = [0.01, 0.1,0.2,0.3,0.4,0.5, 0.6,0.7,0.8,0.9,1,2,3,5]
 pca_eval =  pd.DataFrame(columns=alpha_grid + ['naive_mse', 'test_mse'])
 target = 'unemployment_rate'
 

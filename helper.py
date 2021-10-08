@@ -1077,11 +1077,13 @@ def train_mean_model(agg: pd.DataFrame, target: str, city: str, country: str):
     reduced_data = reduced_data.join(agg.iloc[:,-5:])
     predicts = train_xgboost(reduced_data, target, cols, 'predicts')
     predicts_master.loc[:,'y_pred_pca_lasso_boosted'] = predicts.y_pred
-
+    
+    #store prediction results
     predicts_master.loc[:, 'y_pred'] = predicts_master[['y_pred_lasso_boosted', 'y_pred_pca_lasso_boosted']].mean(axis = 1)
     predicts_master.loc[:, 'y_test'] = predicts['y_test']
     predicts_master.loc[:, 'y_naive'] = predicts.naive
 
+    #reverse scaling of predictions
     targets = ['unemployment_rate', 'income_levels', 'foreign_nationals']
     scaler = get_training_data(city, country, 1000, 'count', 2015, 'scaler')
     scaler_new = RobustScaler()
@@ -1138,108 +1140,6 @@ def plot_result_correlation(predicts: pd.DataFrame, city:str):
     ax.set(ylabel='Socioeconomic value')
     #return fig
     
-    
-def plot_socio_year_impact(model: str, target: str):
-    
-    """
-    Plot improvement in % by socio year
-    """
-    
-    model = model
-    target = target
-    df = pd.read_csv(f'output/{model}_{target}.csv')
-    df.iloc[:,1:] = df.iloc[:,1:].astype(float)
-    df.loc[:, 'best_param'] = df.iloc[:,1:-2].idxmax(axis = 1)
-    df[['city', 'radius', 'density_type', 'socio_year', 'scaled']] = df['Unnamed: 0'].str.split('_', 4, True)
-
-    df = df[(df.radius ==str(1000))&(df.density_type=='count')]
-    df.loc[:, 'improvement_pct'] = 100 - ((df.test_mse / df.naive_mse)*100)
-    df.loc[:, 'model'] = 'lasso'
-    full = df[['city','model', 'scaled', 'radius', 'density_type', 'socio_year','naive_mse', 'test_mse', 'improvement_pct']].copy()
-
-    ax = sns.barplot(data = full, x='city', y='improvement_pct', hue = 'socio_year')
-    
-def plot_scaling_impact(model: str, target: str, year: int):
-    
-    """
-    Method plots improvement based on the scaling used
-    """
-    
-    model = model
-    target = target
-    df = pd.read_csv(f'output/{model}_{target}.csv')
-    df.iloc[:,1:] = df.iloc[:,1:].astype(float)
-    df.loc[:, 'best_param'] = df.iloc[:,1:-2].idxmax(axis = 1)
-    df[['city', 'radius', 'density_type', 'socio_year', 'scaled']] = df['Unnamed: 0'].str.split('_', 4, True)
-
-    df = df[(df.city.isin(['marseille', 'paris', 'lyon']))|((df.socio_year == str(year)))]
-
-
-    df = df[(df.radius ==str(1000))&(df.density_type=='count')]
-    df.loc[:, 'improvement_pct'] = 100 - ((df.test_mse / df.naive_mse)*100)
-    df.loc[:, 'model'] = 'lasso'
-    full = df[['city','model', 'scaled', 'radius', 'density_type', 'socio_year','naive_mse', 'test_mse', 'improvement_pct']].copy()
-
-    ax = sns.barplot(data = full, x='city', y='improvement_pct', hue = 'scaled')
-    
-def plot_model_comparison(target: str, year: int, ignore_pca: bool):
-    
-    
-    """
-    Method plots improvement in % for all scaling and model combinations to find the best option
-    """
-    
-    model = 'lasso'
-    target = target
-    df = pd.read_csv(f'output/{model}_{target}.csv')
-    df.iloc[:,1:] = df.iloc[:,1:].astype(float)
-    df.loc[:, 'best_param'] = df.iloc[:,1:-2].idxmax(axis = 1)
-    df[['city', 'radius', 'density_type', 'socio_year', 'scaled']] = df['Unnamed: 0'].str.split('_', 4, True)
-
-    df = df[(df.city.isin(['marseille', 'paris', 'lyon']))|((df.socio_year == str(year)))]
-
-
-    df = df[(df.radius ==str(1000))&(df.density_type=='count')]
-    df.loc[:, 'improvement_pct'] = 100 - ((df.test_mse / df.naive_mse)*100)
-    df.loc[:, 'model'] = 'lasso'
-    full = df[['city','model', 'scaled', 'radius', 'density_type', 'socio_year','naive_mse', 'test_mse', 'improvement_pct']].copy()
-
-    if (ignore_pca != True):
-
-        model = 'pca'
-        target = target
-        df = pd.read_csv(f'output/{model}_{target}.csv')
-        df.iloc[:,1:] = df.iloc[:,1:].astype(float)
-        df.loc[:, 'best_param'] = df.iloc[:,1:-2].idxmax(axis = 1)
-        df[['city', 'radius', 'density_type', 'socio_year', 'scaled']] = df['Unnamed: 0'].str.split('_', 4, True)
-
-        df = df[(df.city.isin(['marseille', 'paris', 'lyon']))|((df.socio_year == str(year)))]
-
-
-        df = df[(df.radius ==str(1000))&(df.density_type=='count')]
-        df.loc[:, 'improvement_pct'] = 100 - ((df.test_mse / df.naive_mse)*100)
-        df.loc[:, 'model'] = 'pca'
-        full = full.append(df[['city','model', 'scaled', 'radius', 'density_type', 'socio_year','naive_mse', 'test_mse', 'improvement_pct']])
-
-    model = 'pca_lasso'
-    target = target
-    df = pd.read_csv(f'output/{model}_{target}.csv')
-    df.iloc[:,1:] = df.iloc[:,1:].astype(float)
-    df.loc[:, 'best_param'] = df.iloc[:,1:-2].idxmax(axis = 1)
-    df[['city', 'radius', 'density_type', 'socio_year', 'scaled']] = df['Unnamed: 0'].str.split('_', 4, True)
-
-    df = df[(df.city.isin(['marseille', 'paris', 'lyon']))|((df.socio_year == str(year)))]
-
-
-    df = df[(df.radius ==str(1000))&(df.density_type=='count')]
-    df.loc[:, 'improvement_pct'] = 100 - ((df.test_mse / df.naive_mse)*100)
-    df.loc[:, 'model'] = 'pca_lasso'
-    full = full.append(df[['city','model', 'scaled', 'radius', 'density_type', 'socio_year','naive_mse', 'test_mse', 'improvement_pct']])
-
-    full.loc[:,'model_type'] = full.model+'_'+full.scaled
-
-    ax = sns.barplot(data = full, x='city', y='improvement_pct', hue = 'model_type')
-
 
 
 ##### Utilities #############################################
