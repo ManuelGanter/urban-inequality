@@ -17,3 +17,4 @@ This projects hold the code we will publish for the urban inequality paper at th
 "cross_city_evaluation": Code to evaluate the predictive power across cities
 
 "helper.py": python file with additonal methods used in our notebooks
+
