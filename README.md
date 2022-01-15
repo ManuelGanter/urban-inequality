@@ -1,4 +1,4 @@
-# Urban Inequality WWW
+# Urban Inequality
 
 This projects hold the code we will publish for the urban inequality paper at the WWW22
 
