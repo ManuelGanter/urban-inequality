@@ -1,6 +1,6 @@
 # Urban Inequality
 
-This projects hold the code we will publish for the urban inequality paper at the WWW22
+This projects hold the code we will publish for the urban inequality paper
 
 "scripts": This folder holds the two python scripts we use for feature generation and model training
 
